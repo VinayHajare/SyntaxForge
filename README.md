@@ -29,21 +29,21 @@ src/
 │   ├── Production.java           # Production rules
 │   ├── Symbol.java               # Grammar symbols (terminals/non-terminals)
 │   ├── GrammarReader.java        # File parser for grammar specifications
-│   └── ParseTree.java            # Parse tree representation
+│   └── GrammarTest.java          # Grammar Testing class
 │
 ├── ll/           # LL(1) parser implementation
 │   ├── LLParser.java             # Main LL parser class
 │   ├── FirstFollowCalculator.java # FIRST/FOLLOW set computation
-│   ├── LeftRecursionEliminator.java # Left recursion handling
-│   ├── LeftFactorer.java         # Left factoring implementation
+│   ├── LLParserTest.java         # LLParser testing class
 │   └── ParsingTable.java         # LL(1) parsing table
 │
 └── lr/           # LR parser implementation
     ├── LRParser.java             # Main LR parser class
     ├── Item.java                 # LR(0) items
-    ├── State.java                # States in the LR state machine
-    ├── ActionTable.java          # ACTION table
-    └── GotoTable.java            # GOTO table
+    ├── ItemSet.java              # Set of Items
+    ├── LRParsingTable.java       # LR parsing table
+    ├── CanonicalCollections.java # Collection of canonical items
+    └── LRParserTestTable.java    # LLParser Testing class
 ```
 
 ## 🚀 Getting Started
@@ -82,13 +82,13 @@ F -> ( E ) | id
 #### Running the LL(1) Parser
 
 ```bash
-java -cp target/syntaxforge.jar com.syntaxforge.Main --parser ll --grammar path/to/grammar.txt --input "id + id * id"
+java LLParserTest.java --grammar path/to/grammar.txt
 ```
 
 #### Running the LR Parser
 
 ```bash
-java -cp target/syntaxforge.jar com.syntaxforge.Main --parser lr --grammar path/to/grammar.txt --input "id + id * id"
+java LRParserTest.java --grammar path/to/grammar.txt
 ```
 
 ## 📝 Grammar Format
