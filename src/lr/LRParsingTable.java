@@ -9,12 +9,14 @@ public class LRParsingTable {
     private final Map<ActionKey, Action> actionTable;
     private final Map<GotoKey, Integer> gotoTable;
     private final Symbol EOF = new Symbol("$", true);
+    private final FirstFollowCalculator followCalculator;
 
     public LRParsingTable(Grammar grammar, CanonicalCollection canonicalCollection) {
         this.grammar = grammar;
         this.canonicalCollection = canonicalCollection;
         this.actionTable = new HashMap<>();
         this.gotoTable = new HashMap<>();
+        this.followCalculator = new FirstFollowCalculator(grammar);
         constructTable();
     }
 
@@ -64,7 +66,7 @@ public class LRParsingTable {
                         int prodIndex = findProductionIndex(prod);
                         
                         // For SLR(1), we use FOLLOW set
-                        Set<Symbol> followSet = computeFollowSet(leftSide);
+                        Set<Symbol> followSet = followCalculator.getFollow(leftSide);
                         for (Symbol symbol : followSet) {
                             ActionKey key = new ActionKey(stateNum, symbol);
                             Action action = new Action(ActionType.REDUCE, prodIndex);
@@ -95,17 +97,6 @@ public class LRParsingTable {
             }
         }
         return -1;
-    }
-
-    private Set<Symbol> computeFollowSet(Symbol nonTerminal) {
-        // This is a simplified version
-        // In a real parser, you should use a proper FOLLOW set calculation
-        Set<Symbol> followSet = new HashSet<>();
-        followSet.add(EOF);
-        for (Symbol terminal : grammar.getTerminals()) {
-            followSet.add(terminal);
-        }
-        return followSet;
     }
 
     public Action getAction(int state, Symbol symbol) {
